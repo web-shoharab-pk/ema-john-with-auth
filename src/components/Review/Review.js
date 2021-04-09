@@ -15,9 +15,9 @@ const Review = () => {
     }
 
     const removeProduct = (productKey) => {
-        const newCart = cart.filter(pd => pd.key !== productKey);
-        setCart(newCart);
         removeFromDatabaseCart(productKey);
+        const newCart = cart.filter(pd => pd.key !== productKey);
+        setCart(newCart);      
     }
 
     useEffect(()=>{

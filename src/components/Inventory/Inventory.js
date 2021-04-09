@@ -13,13 +13,13 @@ const Inventory = () => {
         })
     }
     return (
-        <div>
+        <div className="w-50 container">
             <form action="">
-                <p><span>Name: </span><input type="text" /></p>
-                <p><span>Price: </span><input type="tnumber" /></p>
-                <p><span>Quantity: </span><input type="number" /></p>
-                <p><span>Product Image</span><input type="file" /></p>
-                <button onClick={handleAddProduct} className="btn btn-success">Add Product</button>
+                <p><span>Name: </span><input className="form-control" type="text" /></p>
+                <p><span>Price: </span><input className="form-control" type="tnumber" /></p>
+                <p><span>Quantity: </span><input className="form-control" type="number" /></p>
+                <p><span>Product Image</span><input className="form-control" type="file" /></p>
+                <button onClick={handleAddProduct} className="btn w-100 btn-success">Add Product</button>
             </form>
            
         </div>

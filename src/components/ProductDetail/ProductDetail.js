@@ -8,7 +8,7 @@ const ProductDetail = () => {
     const [product, setProduct] = useState({});
 
     useEffect(() => {
-        fetch(`http://localhost:4000/product/${productKey}`)
+        fetch(`http://localhost:4000/${productKey}`)
         .then(res => res.json())
         .then(data => setProduct(data))
     }, [productKey])
