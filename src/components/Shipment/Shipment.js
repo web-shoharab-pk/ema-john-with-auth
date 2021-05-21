@@ -1,23 +1,31 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import './Shipment.css';
-import { useContext } from 'react';
+import { useHistory } from 'react-router';
 import { UserContext } from '../../App';
 import { getDatabaseCart, processOrder } from '../../utilities/databaseManager';
-import { useHistory } from 'react-router';
 import ProcessPayment from '../ProcessPayment/ProcessPayment';
+import './Shipment.css';
 
 const Shipment = () => {
   const { register, handleSubmit, watch, errors } = useForm();
   const [loggedInUser] = useContext(UserContext);
+  const [shippingData, setShippingData] = useState(null)
   const history = useHistory();
 
   const onSubmit = data => {
     // console.log('form submitted', data)
+    setShippingData(data)
+  };
+
+  const handlePaymentSuccess = paymentId => {
     const saveCart = getDatabaseCart();
-    const orderDetails = { ...loggedInUser, products: saveCart, shipment: data, orderTime: new Date() };
+    const orderDetails = { ...loggedInUser,
+       products: saveCart,
+        shipment: shippingData, 
+        paymentId: paymentId,
+        orderTime: new Date() };
     console.log(orderDetails);
-    fetch('http://localhost:4000/addOrder', {
+    fetch('https://floating-taiga-67119.herokuapp.com/addOrder', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -32,14 +40,15 @@ const Shipment = () => {
           history.push('/shop');
         }
       })
-  };
+  }
 
   console.log(watch("example")); // watch input value by passing the name of it
 
   return (
 
     <div className="row">
-      <div className="col-md-6">
+      <div style={{display: shippingData ? 'none' : 'block'}} className="col-md-6">
+        <h3 className="p-3">Please Inter Your delivery Address</h3> 
         <form className="ship-form" onSubmit={handleSubmit(onSubmit)}>
           <input className="form-control" name="name" defaultValue={loggedInUser.name} ref={register({ required: true })} placeholder="Your Name" />
           {errors.name && <span className="error">Name is required</span>}
@@ -56,9 +65,9 @@ const Shipment = () => {
           <input className="form-control" type="submit" />
         </form>
       </div>
-      <div className="col-md-6">
+      <div style={{display: shippingData ? 'block' : 'none'}} className="col-md-6">
         <h1>please pay for me</h1>
-        <ProcessPayment />
+        <ProcessPayment handlePayment={handlePaymentSuccess} />
       </div>
     </div>
 

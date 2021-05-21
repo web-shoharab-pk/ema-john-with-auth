@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
-import './Shop.css';
-import Product from '../Product/Product';
-import Cart from '../Cart/Cart';
-import { addToDatabaseCart, getDatabaseCart } from '../../utilities/databaseManager';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { addToDatabaseCart, getDatabaseCart } from '../../utilities/databaseManager';
+import Cart from '../Cart/Cart';
+import Product from '../Product/Product';
+import './Shop.css';
 
 const Shop = () => {
    
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
+    // const [search, setSearch] = useState('');
     
     useEffect(() => {
-        fetch('http://localhost:4000/products')
+        fetch('https://floating-taiga-67119.herokuapp.com/products')
         .then(res => res.json())
         .then(data => setProducts(data))
     }, [])
@@ -21,7 +21,7 @@ const Shop = () => {
     useEffect(()=>{
         const savedCart = getDatabaseCart();
         const productKeys = Object.keys(savedCart);
-        fetch('http://localhost:4000/productsByKeys', {
+        fetch('https://floating-taiga-67119.herokuapp.com/productsByKeys', {
             method: 'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -30,17 +30,11 @@ const Shop = () => {
         })
         .then(res => res.json())
         .then(data => setCart(data))
-   
-        // console.log(products, productKeys);
-        // if(products.length){
-        //     const previousCart = productKeys.map( existingKey => {
-        //         const product = products.find( pd => pd.key === existingKey);
-        //         product.quantity = savedCart[existingKey];
-        //         return product;
-        //     } )
-        //     setCart(previousCart);
-        // }
     }, [products])
+
+    const handleSearch = event => {
+        // setSearch(event.target.value)
+    }
 
     const handleAddProduct = (product) =>{
         const toBeAddedKey = product.key;
@@ -64,6 +58,7 @@ const Shop = () => {
     return (
         <div className="twin-container">
             <div className="product-container">
+                <input type="text" className="product-search my-3" onBlur={handleSearch} placeholder="search" />
                 {
                     products.map(pd => <Product 
                         key={pd.key}

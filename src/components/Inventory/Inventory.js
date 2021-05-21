@@ -1,10 +1,10 @@
 import React from 'react';
-
-
+ 
 const Inventory = () => {
     const product = {};
     const handleAddProduct = () => {
-        fetch('http://localhost:4000/addProduct', {
+       
+        fetch('https://floating-taiga-67119.herokuapp.com/addProduct', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
